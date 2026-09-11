@@ -1,4 +1,4 @@
-import { Schema, model, models, type HydratedDocument } from "mongoose";
+import { Schema, model, models, type HydratedDocument, type Model } from "mongoose";
 
 export const userRoles = ["user", "staff", "admin"] as const;
 export type UserRole = (typeof userRoles)[number];
@@ -47,4 +47,5 @@ const userSchema = new Schema<UserRecord>(
 
 userSchema.index({ email: 1 }, { unique: true });
 
-export const User = models.User || model<UserRecord>("User", userSchema);
+export const User: Model<UserRecord> =
+  (models.User as Model<UserRecord> | undefined) ?? model<UserRecord>("User", userSchema);
