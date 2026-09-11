@@ -25,14 +25,22 @@ A short chronological record of meaningful project changes.
 - Added `POST /api/v1/auth/register`.
 - Added strong input validation, bcrypt hashing at 12 rounds, and generic duplicate-email handling.
 - Added validation and route-boundary tests, including the no-database `503` behavior.
-- Added the dependency lockfile.
-- Verified a clean install, TypeScript typecheck, 6 tests, and production build locally.
+
+## 2026-09-11 — Login and token/session foundation
+
+- Added `POST /api/v1/auth/login` with generic invalid-credential handling.
+- Added 15-minute HS256 JWT access-token issuance using JOSE.
+- Added opaque 30-day refresh sessions stored as SHA-256 hashes in MongoDB.
+- Added HttpOnly, SameSite=Strict refresh-token cookies scoped to auth routes.
+- Added a 10-attempt, 15-minute auth rate limiter and test coverage for its `429` response.
+- Added login validation and route-boundary tests.
+- Updated the dependency lockfile.
+- Verified a clean install, TypeScript typecheck, 11 tests, and production build locally.
 
 ## Next implementation milestones
 
-1. Design login and short-lived token issuance.
-2. Model revocable refresh-token/session records.
-3. Add rate limits before exposing registration publicly.
-4. Add protected-route and role middleware.
-5. Add Swagger documentation and database-backed integration tests.
-6. Add password-reset flow and security review.
+1. Implement refresh-token rotation and logout revocation.
+2. Add protected-route and role middleware.
+3. Add a shared rate-limit store before multi-instance deployment.
+4. Add Swagger documentation and database-backed integration tests.
+5. Add password-reset flow and security review.
