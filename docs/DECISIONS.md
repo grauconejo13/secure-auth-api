@@ -36,9 +36,15 @@
 
 **Why:** The JWT is small and short-lived for API authorization. The opaque session is individually revocable and its raw value is not retained by the server.
 
+## Refresh-token rotation and replay response
+
+**Decision:** Each refresh token is single-use. Its session record is marked consumed before a replacement is created; presenting a consumed token revokes the entire token family.
+
+**Why:** A copied previous refresh token cannot silently continue a session after rotation. Revoking the family forces a fresh login after detected replay.
+
 ## Refresh-token transport
 
-**Decision:** Send the refresh token in an HttpOnly, SameSite=Strict cookie scoped to `/api/v1/auth`; return the access token in the login JSON response.
+**Decision:** Send the refresh token in an HttpOnly, SameSite=Strict cookie scoped to `/api/v1/auth`; return the access token in the login/refresh JSON response.
 
 **Why:** Browser JavaScript cannot read the refresh token. The client can keep the access token in memory and attach it explicitly to API calls.
 
