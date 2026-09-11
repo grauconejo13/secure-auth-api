@@ -15,32 +15,26 @@ A short chronological record of meaningful project changes.
 - Added strict runtime environment validation with Zod and a safe `.env.example`.
 - Added Helmet, CORS configuration, request-size limits, versioned routing, and standardized error responses.
 - Added `GET /api/v1/health` plus an integration test.
-- Added graceful shutdown handling and initial API-contract documentation.
-- Verified a clean install, TypeScript typecheck, health-route test, and production build locally.
 
-## 2026-09-11 — Registration foundation
+## 2026-09-11 — Registration and login foundation
 
-- Added MongoDB connection lifecycle support and a typed user model.
-- Added a normalized, unique email index and `user`, `staff`, and `admin` roles.
-- Added `POST /api/v1/auth/register`.
-- Added strong input validation, bcrypt hashing at 12 rounds, and generic duplicate-email handling.
-- Added validation and route-boundary tests, including the no-database `503` behavior.
+- Added typed MongoDB user and session models.
+- Added `POST /api/v1/auth/register` and `/login`.
+- Added strong input validation, bcrypt hashing at 12 rounds, and generic invalid-credential handling.
+- Added 15-minute HS256 JWT access tokens, opaque refresh sessions, and HttpOnly cookies.
+- Added a 10-attempt, 15-minute auth rate limiter.
 
-## 2026-09-11 — Login and token/session foundation
+## 2026-09-11 — Session rotation and logout
 
-- Added `POST /api/v1/auth/login` with generic invalid-credential handling.
-- Added 15-minute HS256 JWT access-token issuance using JOSE.
-- Added opaque 30-day refresh sessions stored as SHA-256 hashes in MongoDB.
-- Added HttpOnly, SameSite=Strict refresh-token cookies scoped to auth routes.
-- Added a 10-attempt, 15-minute auth rate limiter and test coverage for its `429` response.
-- Added login validation and route-boundary tests.
+- Added cookie parsing, `POST /api/v1/auth/refresh`, and `/logout`.
+- Added single-use refresh tokens, replacement sessions, and session-family replay revocation.
+- Added cookie and route-boundary tests.
 - Updated the dependency lockfile.
-- Verified a clean install, TypeScript typecheck, 11 tests, and production build locally.
+- Verified a clean install, TypeScript typecheck, 15 tests, and production build locally.
 
 ## Next implementation milestones
 
-1. Implement refresh-token rotation and logout revocation.
-2. Add protected-route and role middleware.
-3. Add a shared rate-limit store before multi-instance deployment.
-4. Add Swagger documentation and database-backed integration tests.
-5. Add password-reset flow and security review.
+1. Add protected-route and role middleware.
+2. Add a shared rate-limit store before multi-instance deployment.
+3. Add Swagger documentation and database-backed integration tests.
+4. Add password-reset flow and security review.
