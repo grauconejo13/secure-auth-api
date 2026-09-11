@@ -1,14 +1,23 @@
 # Performance and Security Notes
 
-## Baseline goals
+## Current controls
 
-- Validate requests before database work.
-- Return consistent, minimal error messages.
-- Hash passwords with a modern adaptive password-hashing algorithm.
-- Apply rate limits to sign-in, registration, and password-reset endpoints.
-- Avoid user-enumeration responses in login and recovery flows.
-- Use pagination for administrative user lists.
-- Add a `GET /health` endpoint for deployment monitoring.
+- Validate registration requests before database work.
+- Normalize emails before lookup and storage.
+- Enforce a unique email index in MongoDB.
+- Hash passwords with bcrypt at 12 rounds; never return or log the password hash.
+- Return a generic duplicate-registration response.
+- Keep database-backed routes unavailable when MongoDB is disconnected.
+- Limit JSON request bodies to 16 KB.
+- Use Helmet and explicitly configured CORS.
+
+## Next controls
+
+- Apply rate limits to registration, sign-in, and password-reset endpoints.
+- Add short-lived access tokens and revocable refresh-token sessions.
+- Add password-reset tokens that are hashed at rest.
+- Add structured logging with sensitive-field redaction.
+- Add database-backed integration tests.
 
 ## Measurements to add during implementation
 
@@ -22,10 +31,10 @@
 
 ## Security review gate before deployment
 
-- [ ] Environment variables validated at startup
-- [ ] Passwords never returned or logged
+- [x] Environment variables validated at startup
+- [x] Passwords never returned or logged
 - [ ] Tokens and reset links redacted from logs
-- [ ] CORS configured to the intended client origin
+- [x] CORS configured to the intended client origin
 - [ ] HTTPS enforced by the hosting platform
 - [ ] Dependencies scanned and updated
 - [ ] Authorization tests cover cross-user access attempts
