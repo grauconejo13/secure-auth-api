@@ -1,6 +1,13 @@
 import { Buffer } from "node:buffer";
 import { z } from "zod";
 
+const emailSchema = z
+  .string()
+  .trim()
+  .email("Enter a valid email address.")
+  .max(254)
+  .transform((email) => email.toLowerCase());
+
 const passwordSchema = z
   .string()
   .min(12, "Password must be at least 12 characters.")
@@ -16,12 +23,7 @@ const passwordSchema = z
 
 export const registerRequestSchema = z
   .object({
-    email: z
-      .string()
-      .trim()
-      .email("Enter a valid email address.")
-      .max(254)
-      .transform((email) => email.toLowerCase()),
+    email: emailSchema,
     password: passwordSchema,
     displayName: z.string().trim().min(1).max(80).optional()
   })
@@ -37,4 +39,17 @@ export const registerRequestSchema = z
     }
   });
 
+export const loginRequestSchema = z.object({
+  email: emailSchema,
+  password: z
+    .string()
+    .min(1, "Password is required.")
+    .max(72, "Password is too long.")
+    .refine(
+      (password) => Buffer.byteLength(password, "utf8") <= 72,
+      "Password is too long."
+    )
+});
+
 export type RegisterRequest = z.infer<typeof registerRequestSchema>;
+export type LoginRequest = z.infer<typeof loginRequestSchema>;
