@@ -9,7 +9,9 @@
 - Return generic invalid-credential and duplicate-registration responses.
 - Issue 15-minute signed JWT access tokens.
 - Store only SHA-256 hashes of opaque refresh tokens.
+- Rotate refresh tokens and revoke a full token family when an already-consumed token is used.
 - Send refresh tokens as HttpOnly, SameSite=Strict cookies.
+- Logout revokes the current refresh session and clears the cookie.
 - Limit auth requests to 10 attempts per 15-minute window.
 - Keep database-backed routes unavailable when MongoDB or JWT configuration is unavailable.
 - Limit JSON request bodies to 16 KB.
@@ -17,7 +19,6 @@
 
 ## Next controls
 
-- Add refresh-token rotation, replay detection, and logout revocation.
 - Add protected-route and role middleware.
 - Use a shared rate-limit store before multi-instance deployment.
 - Add password-reset tokens that are hashed at rest.
@@ -41,9 +42,10 @@
 - [x] Authentication rate limit added for a single instance
 - [x] Access tokens are short-lived
 - [x] Refresh tokens are hashed at rest and not returned in JSON
+- [x] Refresh-token rotation and family revocation added
 - [x] CORS configured to the intended client origin
 - [ ] Shared rate-limit store configured for multi-instance hosting
 - [ ] HTTPS enforced by the hosting platform
 - [ ] Dependencies scanned and updated
 - [ ] Authorization tests cover cross-user access attempts
-- [ ] A recovery/revocation plan exists for compromised secrets
+- [ ] Database-backed happy-path auth tests
