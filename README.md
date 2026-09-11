@@ -4,16 +4,19 @@ A portfolio-ready authentication and authorization API template for modern web a
 
 This project demonstrates secure account flows without exposing real users, credentials, or production infrastructure. It is designed as a reusable backend foundation—not a shared identity database for every application.
 
-## Planned capabilities
+## Current foundation
 
-- Account registration and sign-in
-- Password hashing and secure validation
-- JWT access and refresh-token flow
-- Role-based authorization: `user`, `admin`, and `staff`
-- Protected API routes
-- Password-reset workflow
-- Request validation, rate limiting, and audit-friendly logs
-- API documentation and automated tests
+The first scaffold is in place:
+
+- TypeScript + Express API structure
+- Security defaults with Helmet, CORS, small JSON payload limits, and no framework fingerprint
+- Strict environment-variable validation
+- Versioned API routing
+- `GET /api/v1/health` endpoint and integration test
+- Graceful server shutdown handling
+- `.env.example` and a Git ignore rule that protects real environment files
+
+Authentication endpoints are intentionally not implemented until their data model, password policy, token lifecycle, rate limiting, and test plan are ready.
 
 ## Intended stack
 
@@ -22,9 +25,27 @@ This project demonstrates secure account flows without exposing real users, cred
 - **Database:** MongoDB
 - **Authentication:** JWT + bcrypt/argon2
 - **Documentation:** OpenAPI / Swagger
-- **Testing:** Jest or Vitest + Supertest
+- **Testing:** Vitest + Supertest
 
-The stack is a starting point and may evolve as implementation begins.
+## Quick start
+
+```bash
+git clone https://github.com/grauconejo13/secure-auth-api.git
+cd secure-auth-api
+npm install
+cp .env.example .env
+npm run dev
+```
+
+Then open `http://localhost:3000/api/v1/health`.
+
+Run checks with:
+
+```bash
+npm run typecheck
+npm test
+npm run build
+```
 
 ## Project boundary
 
@@ -46,6 +67,7 @@ This repository is public source code and documentation only.
 
 ## Repository documentation
 
+- [API contract](docs/API_CONTRACT.md)
 - [Build log](docs/BUILD_LOG.md)
 - [Decisions](docs/DECISIONS.md)
 - [Token usage](docs/TOKEN_USAGE.md)
@@ -53,7 +75,7 @@ This repository is public source code and documentation only.
 
 ## Status
 
-Planning and documentation phase. No production authentication service is deployed from this repository yet.
+Scaffold complete. Next: define the user model and registration flow.
 
 ## License
 
