@@ -25,13 +25,14 @@ export const requireAuth: RequestHandler = async (request, response, next) => {
 
   const authorization = request.header("authorization");
   const match = authorization ? /^Bearer\s+(.+)$/i.exec(authorization) : null;
+  const token = match?.[1];
 
-  if (!match) {
+  if (!token) {
     return sendUnauthorized(response);
   }
 
   try {
-    request.auth = await verifyAccessToken(match[1]);
+    request.auth = await verifyAccessToken(token);
     return next();
   } catch {
     return sendUnauthorized(response);
