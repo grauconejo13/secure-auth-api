@@ -18,11 +18,23 @@
 
 **Why:** It demonstrates more realistic authorization than a login-only demo while staying small enough to document and test well.
 
+## Password handling
+
+**Decision:** Enforce a 12-character, mixed-character password policy and hash passwords with bcrypt at 12 rounds.
+
+**Why:** Passwords must never be stored in plaintext. The 72-byte check prevents bcrypt’s input-length limit from silently weakening a longer password.
+
+## Duplicate email response
+
+**Decision:** Return a generic `EMAIL_UNAVAILABLE` response for duplicate registration attempts.
+
+**Why:** It does not confirm the existing account’s specific state or reveal any user details.
+
 ## Short-lived access tokens with refresh flow
 
-**Decision:** Use a short-lived access token plus a protected refresh-token/session mechanism.
+**Decision:** Add a short-lived access token plus a protected refresh-token/session mechanism after login is designed.
 
-**Why:** It is safer and more realistic than a long-lived browser token. Exact storage and revocation details will be finalized during implementation.
+**Why:** It is safer and more realistic than a long-lived browser token. Exact storage and revocation details will be finalized before implementation.
 
 ## Secrets never enter Git
 
