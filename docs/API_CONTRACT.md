@@ -27,50 +27,17 @@ Authentication endpoints are limited to 10 attempts per 15-minute window per pro
 
 Creates a user account when MongoDB is connected. This endpoint does **not** issue access tokens yet.
 
-**Request body**
-
-```json
-{
-  "email": "vanessa@example.com",
-  "password": "Tranquility!2026",
-  "displayName": "Vanessa"
-}
-```
-
-Password requirements:
-
-- 12–72 characters and no more than 72 UTF-8 bytes
-- at least one lowercase letter, uppercase letter, number, and symbol
-- must not contain the email name
-
-**Success response — `201 Created`**
-
-```json
-{
-  "data": {
-    "id": "mongodb-user-id",
-    "email": "vanessa@example.com",
-    "displayName": "Vanessa",
-    "role": "user",
-    "createdAt": "2026-09-11T12:00:00.000Z"
-  }
-}
-```
-
-The response never includes the password hash.
+Password requirements: 12–72 characters, at most 72 UTF-8 bytes, mixed case, number, symbol, and no email name.
 
 ### `POST /auth/login`
 
-Verifies the email and password, then creates a short-lived access token and an opaque refresh session.
+Verifies credentials, returns a 15-minute access token, and sets a 30-day HttpOnly `refresh_token` cookie. The raw refresh token is never returned in JSON and only its SHA-256 hash is stored in MongoDB.
 
-**Request body**
+### `POST /auth/refresh`
 
-```json
-{
-  "email": "vanessa@example.com",
-  "password": "Tranquility!2026"
-}
-```
+Reads the `refresh_token` HttpOnly cookie, consumes it, creates a replacement refresh token in the same session family, and returns a new access token.
+
+**Request body:** none.
 
 **Success response — `200 OK`**
 
@@ -91,7 +58,13 @@ Verifies the email and password, then creates a short-lived access token and an 
 }
 ```
 
-The response also sets a 30-day, HttpOnly, SameSite=Strict `refresh_token` cookie. The raw refresh token is never returned in JSON and only its SHA-256 hash is stored in MongoDB.
+The response replaces the existing `refresh_token` cookie.
+
+If an already-consumed refresh token is presented, the API revokes every unexpired session in that token family and requires a new sign-in.
+
+### `POST /auth/logout`
+
+Revokes the current refresh-session record when a refresh cookie is present, clears the cookie, and returns **`204 No Content`**.
 
 **Expected errors**
 
@@ -99,6 +72,8 @@ The response also sets a 30-day, HttpOnly, SameSite=Strict `refresh_token` cooki
 |---|---|---|
 | `400` | `VALIDATION_ERROR` | Request data fails validation |
 | `401` | `INVALID_CREDENTIALS` | Email or password is incorrect |
+| `401` | `INVALID_REFRESH_TOKEN` | Refresh token is invalid, expired, or missing |
+| `401` | `REFRESH_TOKEN_REUSED` | Previously consumed token detected; family revoked |
 | `409` | `EMAIL_UNAVAILABLE` | An account cannot be created with those details |
 | `429` | `TOO_MANY_AUTH_ATTEMPTS` | Authentication attempt limit reached |
 | `503` | `SERVICE_UNAVAILABLE` | Required service configuration is unavailable |
@@ -107,7 +82,6 @@ The response also sets a 30-day, HttpOnly, SameSite=Strict `refresh_token` cooki
 
 | Method | Path | Status |
 |---|---|---|
-| POST | `/auth/refresh` | Planned |
-| POST | `/auth/logout` | Planned |
+| GET | `/users/me` | Planned |
 | POST | `/auth/forgot-password` | Planned |
 | POST | `/auth/reset-password` | Planned |
