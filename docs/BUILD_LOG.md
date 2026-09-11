@@ -9,12 +9,20 @@ A short chronological record of meaningful project changes.
 - Added initial README and project documentation.
 - Selected a provisional implementation direction: TypeScript, Express, MongoDB, JWT, and OpenAPI.
 
+## 2026-09-11 — API scaffold
+
+- Added a Node 20+ TypeScript + Express project foundation.
+- Added strict runtime environment validation with Zod and a safe `.env.example`.
+- Added Helmet, CORS configuration, request-size limits, versioned routing, and standardized error responses.
+- Added `GET /api/v1/health` plus an integration test.
+- Added graceful shutdown handling and initial API-contract documentation.
+- Kept authentication endpoints out of this stage until their security design and tests are defined.
+
 ## Next implementation milestones
 
-1. Scaffold the TypeScript/Express project and linting.
-2. Add environment validation and `.env.example`.
-3. Model users, roles, and refresh-token/session records.
-4. Implement registration, login, refresh, and logout endpoints.
-5. Add protected-route and role middleware.
-6. Write API tests and publish Swagger documentation.
-7. Add password-reset flow, rate limiting, and security review.
+1. Model users, roles, and refresh-token/session records.
+2. Define password policy and registration validation.
+3. Implement registration, login, refresh, and logout endpoints.
+4. Add protected-route and role middleware.
+5. Add Swagger documentation and expanded integration tests.
+6. Add password-reset flow, rate limiting, and security review.
