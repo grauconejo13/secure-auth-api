@@ -14,24 +14,15 @@ This project demonstrates secure account flows without exposing real users, cred
 - Opaque, hashed, revocable refresh-session records (30 days)
 - Refresh-token rotation with token-family replay detection
 - HttpOnly refresh-token cookie scoped to `/api/v1/auth`
+- Bearer-token verification with fixed issuer, audience, algorithm, and required role claim
+- Protected `GET /api/v1/users/me` route
+- Admin-only `GET /api/v1/admin/users` route
+- `user`, `staff`, and `admin` role middleware
 - 10-attempt / 15-minute authentication rate limit
 - Security defaults with Helmet, credentialed CORS, small JSON payload limits, and no framework fingerprint
-- Strict environment-variable validation
-- Versioned API routing and standardized error responses
-- `GET /api/v1/health` endpoint
-- 15 passing tests, including cookie and rate-limit coverage
-- Graceful server shutdown and safe `.env.example` handling
+- 18 passing tests, including token and role middleware coverage
 
 Database-backed authentication requires both `MONGODB_URI` and `JWT_ACCESS_SECRET`. Without them, the API starts for health checks but returns `503 Service Unavailable` for database-backed auth routes.
-
-## Intended stack
-
-- **Runtime:** Node.js + TypeScript
-- **Framework:** Express
-- **Database:** MongoDB + Mongoose
-- **Authentication:** bcrypt, JOSE/JWT, opaque refresh sessions
-- **Documentation:** OpenAPI / Swagger
-- **Testing:** Vitest + Supertest
 
 ## Quick start
 
@@ -57,12 +48,12 @@ npm run build
 
 ## Token handling
 
-- Send the returned access token only in an `Authorization: Bearer <token>` request header.
+- Send the access token in an `Authorization: Bearer <token>` request header.
 - Keep the access token in application memory, not browser local storage.
 - The refresh token is never returned in JSON; it is sent as an HttpOnly cookie.
 - Each refresh consumes the old token and replaces it. Reusing an older token revokes its entire session family.
 - Logout revokes the current refresh session and clears the cookie.
-- Add protected-route and role middleware before integrating this service into an app.
+- Role changes take effect after a new access token is issued; access tokens last 15 minutes.
 
 ## Project boundary
 
@@ -77,9 +68,9 @@ This repository is public source code and documentation only.
 | Area | Endpoints |
 |---|---|
 | Authentication | `POST /auth/register`, `/login`, `/refresh`, `/logout` implemented |
+| User profile | `GET /users/me` implemented |
+| Administration | `GET /admin/users?limit=20` implemented for `admin` |
 | Account recovery | `POST /auth/forgot-password`, `POST /auth/reset-password` planned |
-| User profile | `GET /users/me`, `PATCH /users/me` planned |
-| Administration | `GET /admin/users`, `PATCH /admin/users/:id/role` planned |
 | System | `GET /health` implemented |
 
 ## Repository documentation
@@ -92,7 +83,7 @@ This repository is public source code and documentation only.
 
 ## Status
 
-Core authentication session loop complete. Next: protected-route and role middleware.
+Authentication and authorization foundation complete. Next: database-backed happy-path tests, Swagger, and deployment hardening.
 
 ## License
 
