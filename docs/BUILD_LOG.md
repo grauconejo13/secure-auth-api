@@ -17,6 +17,7 @@ A short chronological record of meaningful project changes.
 - Added `GET /api/v1/health` plus an integration test.
 - Added graceful shutdown handling and initial API-contract documentation.
 - Kept authentication endpoints out of this stage until their security design and tests are defined.
+- Verified a clean install, TypeScript typecheck, health-route test, and production build locally.
 
 ## Next implementation milestones
 
