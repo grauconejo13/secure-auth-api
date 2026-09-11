@@ -30,11 +30,23 @@
 
 **Why:** It does not confirm the existing account’s specific state or reveal any user details.
 
-## Short-lived access tokens with refresh flow
+## Access tokens and refresh sessions
 
-**Decision:** Add a short-lived access token plus a protected refresh-token/session mechanism after login is designed.
+**Decision:** Issue a 15-minute HS256 JWT access token and store a separate opaque 30-day refresh token only as a SHA-256 hash in MongoDB.
 
-**Why:** It is safer and more realistic than a long-lived browser token. Exact storage and revocation details will be finalized before implementation.
+**Why:** The JWT is small and short-lived for API authorization. The opaque session is individually revocable and its raw value is not retained by the server.
+
+## Refresh-token transport
+
+**Decision:** Send the refresh token in an HttpOnly, SameSite=Strict cookie scoped to `/api/v1/auth`; return the access token in the login JSON response.
+
+**Why:** Browser JavaScript cannot read the refresh token. The client can keep the access token in memory and attach it explicitly to API calls.
+
+## Rate-limiting scope
+
+**Decision:** Apply a 10-attempt, 15-minute rate limit to authentication endpoints.
+
+**Why:** It slows basic credential-stuffing attempts. The in-memory store is acceptable for this single-instance starter; production with multiple instances needs a shared external store.
 
 ## Secrets never enter Git
 
