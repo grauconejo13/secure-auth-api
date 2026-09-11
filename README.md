@@ -6,24 +6,25 @@ This project demonstrates secure account flows without exposing real users, cred
 
 ## Current foundation
 
-The first scaffold is in place:
-
 - TypeScript + Express API structure
+- MongoDB user model with a unique normalized-email index
+- `POST /api/v1/auth/register` registration endpoint
+- Strong password validation and bcrypt hashing at 12 rounds
 - Security defaults with Helmet, CORS, small JSON payload limits, and no framework fingerprint
 - Strict environment-variable validation
-- Versioned API routing
-- `GET /api/v1/health` endpoint and integration test
-- Graceful server shutdown handling
-- `.env.example` and a Git ignore rule that protects real environment files
+- Versioned API routing and standardized error responses
+- `GET /api/v1/health` endpoint
+- Registration validation and route-boundary tests
+- Graceful server shutdown and safe `.env.example` handling
 
-Authentication endpoints are intentionally not implemented until their data model, password policy, token lifecycle, rate limiting, and test plan are ready.
+Registration requires a MongoDB connection. Without `MONGODB_URI`, the API starts for health checks but returns `503 Service Unavailable` for database-backed endpoints.
 
 ## Intended stack
 
 - **Runtime:** Node.js + TypeScript
 - **Framework:** Express
-- **Database:** MongoDB
-- **Authentication:** JWT + bcrypt/argon2
+- **Database:** MongoDB + Mongoose
+- **Authentication:** bcrypt now; JWT access and refresh tokens next
 - **Documentation:** OpenAPI / Swagger
 - **Testing:** Vitest + Supertest
 
@@ -38,6 +39,8 @@ npm run dev
 ```
 
 Then open `http://localhost:3000/api/v1/health`.
+
+To enable registration locally, set `MONGODB_URI` in your uncommitted `.env` file.
 
 Run checks with:
 
@@ -55,15 +58,15 @@ This repository is public source code and documentation only.
 - Commit only `.env.example`, never a real `.env`.
 - Each production app should use its own deployment configuration, database, and accounts.
 
-## Planned API surface
+## Current API surface
 
-| Area | Example endpoints |
+| Area | Endpoints |
 |---|---|
-| Authentication | `POST /auth/register`, `POST /auth/login`, `POST /auth/refresh`, `POST /auth/logout` |
-| Account recovery | `POST /auth/forgot-password`, `POST /auth/reset-password` |
-| User profile | `GET /users/me`, `PATCH /users/me` |
-| Administration | `GET /admin/users`, `PATCH /admin/users/:id/role` |
-| System | `GET /health` |
+| Authentication | `POST /auth/register` implemented; login, refresh, and logout planned |
+| Account recovery | `POST /auth/forgot-password`, `POST /auth/reset-password` planned |
+| User profile | `GET /users/me`, `PATCH /users/me` planned |
+| Administration | `GET /admin/users`, `PATCH /admin/users/:id/role` planned |
+| System | `GET /health` implemented |
 
 ## Repository documentation
 
@@ -75,7 +78,7 @@ This repository is public source code and documentation only.
 
 ## Status
 
-Scaffold complete. Next: define the user model and registration flow.
+Registration foundation complete. Next: login, secure token issuance, and refresh-token/session design.
 
 ## License
 
