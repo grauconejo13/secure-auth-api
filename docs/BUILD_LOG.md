@@ -28,6 +28,12 @@ A short chronological record of meaningful project changes.
 - Kept the test opt-in as `npm run test:integration` so fast checks do not require a spawned database.
 - The managed build environment blocks a MongoDB process from opening its temporary data files (`Operation not permitted`), so the integration command must run on normal local development or CI infrastructure.
 
+## 2026-09-12 — OpenAPI documentation
+
+- Added a live Swagger UI at `/api/v1/docs/` and a machine-readable OpenAPI 3.0.3 document at `/api/v1/openapi.json`.
+- Documented every implemented endpoint, request constraint, Bearer-token requirement, refresh-cookie behavior, and expected error category.
+- Added route-level coverage for the specification and interactive page.
+
 ## Next implementation milestones
 
 1. Add Swagger documentation.
