@@ -20,7 +20,7 @@ This project demonstrates secure account flows without exposing real users, cred
 - `user`, `staff`, and `admin` role middleware
 - 10-attempt / 15-minute authentication rate limit
 - Security defaults with Helmet, credentialed CORS, small JSON payload limits, and no framework fingerprint
-- 18 fast unit and boundary tests, plus a database-backed auth-flow test for permitted MongoDB environments
+- Interactive Swagger UI and machine-readable OpenAPI 3.0.3 contract\n- 20 fast unit and boundary tests, plus a database-backed auth-flow test for permitted MongoDB environments
 
 Database-backed authentication requires both `MONGODB_URI` and `JWT_ACCESS_SECRET`. Without them, the API starts for health checks but returns `503 Service Unavailable` for database-backed auth routes.
 
@@ -52,7 +52,7 @@ Run the full disposable MongoDB flow on a normal local or CI environment that pe
 npm run test:integration
 ```
 
-See [testing notes](docs/TESTING.md) for details.
+See [testing notes](docs/TESTING.md) for details.\n\n## API documentation\n\nStart the server, then open `http://localhost:3000/api/v1/docs/` for the interactive Swagger UI. The machine-readable OpenAPI document is served at `/api/v1/openapi.json`.\n\nThe docs let you paste a Bearer access token for protected routes. The refresh token remains an HttpOnly cookie and is deliberately never exposed in JSON.
 
 ## Token handling
 
@@ -83,7 +83,7 @@ This repository is public source code and documentation only.
 
 ## Repository documentation
 
-- [API contract](docs/API_CONTRACT.md)
+- [API contract](docs/API_CONTRACT.md) and live Swagger UI (`/api/v1/docs/`)
 - [Build log](docs/BUILD_LOG.md)
 - [Decisions](docs/DECISIONS.md)
 - [Testing](docs/TESTING.md)
@@ -92,7 +92,7 @@ This repository is public source code and documentation only.
 
 ## Status
 
-Authentication and authorization foundation complete. Next: Swagger and deployment hardening.
+Authentication, authorization, and OpenAPI documentation foundation complete. Next: deployment hardening.
 
 ## License
 
