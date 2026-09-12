@@ -20,7 +20,7 @@ This project demonstrates secure account flows without exposing real users, cred
 - `user`, `staff`, and `admin` role middleware
 - 10-attempt / 15-minute authentication rate limit
 - Security defaults with Helmet, credentialed CORS, small JSON payload limits, and no framework fingerprint
-- 18 passing tests, including token and role middleware coverage
+- 18 fast unit and boundary tests, plus a database-backed auth-flow test for permitted MongoDB environments
 
 Database-backed authentication requires both `MONGODB_URI` and `JWT_ACCESS_SECRET`. Without them, the API starts for health checks but returns `503 Service Unavailable` for database-backed auth routes.
 
@@ -38,13 +38,21 @@ Then open `http://localhost:3000/api/v1/health`.
 
 Set `MONGODB_URI` and a private 32+ character `JWT_ACCESS_SECRET` in your uncommitted `.env` file before testing authentication.
 
-Run checks with:
+Run fast checks with:
 
 ```bash
 npm run typecheck
 npm test
 npm run build
 ```
+
+Run the full disposable MongoDB flow on a normal local or CI environment that permits starting a MongoDB process:
+
+```bash
+npm run test:integration
+```
+
+See [testing notes](docs/TESTING.md) for details.
 
 ## Token handling
 
@@ -78,12 +86,13 @@ This repository is public source code and documentation only.
 - [API contract](docs/API_CONTRACT.md)
 - [Build log](docs/BUILD_LOG.md)
 - [Decisions](docs/DECISIONS.md)
+- [Testing](docs/TESTING.md)
 - [Token usage](docs/TOKEN_USAGE.md)
 - [Performance and security notes](docs/PERFORMANCE.md)
 
 ## Status
 
-Authentication and authorization foundation complete. Next: database-backed happy-path tests, Swagger, and deployment hardening.
+Authentication and authorization foundation complete. Next: Swagger and deployment hardening.
 
 ## License
 
