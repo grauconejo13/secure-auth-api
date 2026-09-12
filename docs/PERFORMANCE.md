@@ -17,13 +17,13 @@
 - Limit admin user listings to 50 records.
 - Keep database-backed routes unavailable when MongoDB or JWT configuration is unavailable.
 - Use Helmet and credentialed, explicitly configured CORS.
+- Exercise the full authentication happy path against a disposable MongoDB instance when a test runtime permits it.
 
 ## Next controls
 
 - Use a shared rate-limit store before multi-instance deployment.
 - Add password-reset tokens that are hashed at rest.
 - Add structured logging with sensitive-field redaction.
-- Add database-backed integration tests.
 - Add pagination/cursor navigation before exposing large admin user lists.
 
 ## Security review gate before deployment
@@ -35,7 +35,8 @@
 - [x] Refresh tokens are hashed at rest and not returned in JSON
 - [x] Refresh-token rotation and family revocation added
 - [x] CORS configured to the intended client origin
+- [x] Database-backed happy-path scenario implemented
+- [ ] Integration command verified in a MongoDB-permitted CI runner
 - [ ] Shared rate-limit store configured for multi-instance hosting
 - [ ] HTTPS enforced by the hosting platform
 - [ ] Dependencies scanned and updated
-- [ ] Database-backed happy-path auth tests
