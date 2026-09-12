@@ -22,9 +22,14 @@ A short chronological record of meaningful project changes.
 - Added tests for missing tokens, valid signed tokens, and role-based denial.
 - Verified a clean install, TypeScript typecheck, 18 tests, and production build locally.
 
+## 2026-09-12 — Database-backed happy path
+
+- Added a disposable MongoDB integration test covering registration, login, authenticated profile access, refresh rotation, replay-family revocation, logout, and post-logout denial.
+- Kept the test opt-in as `npm run test:integration` so fast checks do not require a spawned database.
+- The managed build environment blocks a MongoDB process from opening its temporary data files (`Operation not permitted`), so the integration command must run on normal local development or CI infrastructure.
+
 ## Next implementation milestones
 
-1. Add database-backed happy-path tests.
-2. Add Swagger documentation.
-3. Add a shared rate-limit store before multi-instance deployment.
-4. Add password-reset flow and security review.
+1. Add Swagger documentation.
+2. Add a shared rate-limit store before multi-instance deployment.
+3. Add password-reset flow and security review.
