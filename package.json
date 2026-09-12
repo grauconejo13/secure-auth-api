@@ -10,7 +10,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:integration": "cross-env RUN_MONGODB_INTEGRATION=true vitest run tests/auth.integration.test.ts"
   },
   "engines": {
     "node": ">=20"
@@ -33,6 +34,7 @@
     "@types/express": "^5.0.3",
     "@types/node": "^22.15.3",
     "@types/supertest": "^6.0.2",
+    "cross-env": "^10.1.0",
     "mongodb-memory-server": "^11.2.0",
     "supertest": "^7.1.1",
     "tsx": "^4.19.4",
