@@ -13,6 +13,9 @@ import { app } from "../src/app.js";
 
 let mongoServer: MongoMemoryServer | undefined;
 
+const integrationDescribe =
+  process.env.RUN_MONGODB_INTEGRATION === "true" ? describe : describe.skip;
+
 const credentials = {
   email: "vanessa@example.com",
   password: "Tranquility!2026",
@@ -29,10 +32,10 @@ const extractCookie = (response: request.Response): string => {
   return cookie.split(";")[0] ?? "";
 };
 
-describe("database-backed authentication flow", () => {
+integrationDescribe("database-backed authentication flow", () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create({
-      binary: { version: "7.0.14" }
+      binary: { version: process.env.MONGODB_VERSION ?? "7.0.14" }
     });
     await mongoose.connect(mongoServer.getUri());
   }, 60_000);
