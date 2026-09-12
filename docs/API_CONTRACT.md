@@ -2,6 +2,12 @@
 
 Base path: `/api/v1`
 
+## Interactive OpenAPI documentation
+
+Start the API and open [`/api/v1/docs/`](http://localhost:3000/api/v1/docs/) for Swagger UI. The machine-readable document is available at [`/api/v1/openapi.json`](http://localhost:3000/api/v1/openapi.json).
+
+The interactive page supports Bearer-token authorization. The refresh token is intentionally an HttpOnly cookie, never a JSON value; it is usually set automatically only in a compatible same-origin browser session.
+
 ## Authentication
 
 Authentication endpoints are limited to 10 attempts per 15-minute window per process/IP in the current starter configuration.
@@ -36,43 +42,11 @@ The server verifies the token signature, issuer, audience, HS256 algorithm, subj
 
 Returns the authenticated user’s current profile from MongoDB.
 
-**Success response — `200 OK`**
-
-```json
-{
-  "data": {
-    "id": "mongodb-user-id",
-    "email": "vanessa@example.com",
-    "displayName": "Vanessa",
-    "role": "user",
-    "createdAt": "2026-09-11T12:00:00.000Z",
-    "updatedAt": "2026-09-11T12:00:00.000Z"
-  }
-}
-```
-
 ### `GET /admin/users?limit=20`
 
 Requires the `admin` role. Returns up to 50 recent users and never includes password hashes or refresh-token data.
 
-**Success response — `200 OK`**
-
-```json
-{
-  "data": [
-    {
-      "id": "mongodb-user-id",
-      "email": "vanessa@example.com",
-      "displayName": "Vanessa",
-      "role": "user",
-      "createdAt": "2026-09-11T12:00:00.000Z"
-    }
-  ],
-  "meta": { "limit": 20 }
-}
-```
-
-**Expected errors**
+## Expected errors
 
 | Status | Code | Meaning |
 |---|---|---|
