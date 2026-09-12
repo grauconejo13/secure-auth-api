@@ -11,7 +11,7 @@ vi.hoisted(() => {
 
 import { app } from "../src/app.js";
 
-let mongoServer: MongoMemoryServer;
+let mongoServer: MongoMemoryServer | undefined;
 
 const credentials = {
   email: "vanessa@example.com",
@@ -31,7 +31,9 @@ const extractCookie = (response: request.Response): string => {
 
 describe("database-backed authentication flow", () => {
   beforeAll(async () => {
-    mongoServer = await MongoMemoryServer.create();
+    mongoServer = await MongoMemoryServer.create({
+      binary: { version: "7.0.14" }
+    });
     await mongoose.connect(mongoServer.getUri());
   }, 60_000);
 
@@ -41,7 +43,7 @@ describe("database-backed authentication flow", () => {
 
   afterAll(async () => {
     await mongoose.disconnect();
-    await mongoServer.stop();
+    await mongoServer?.stop();
   });
 
   it("registers, authenticates, rotates, detects replay, and logs out", async () => {
