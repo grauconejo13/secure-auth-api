@@ -17,7 +17,7 @@
 - Limit admin user listings to 50 records.
 - Keep database-backed routes unavailable when MongoDB or JWT configuration is unavailable.
 - Use Helmet and credentialed, explicitly configured CORS.
-- Exercise the full authentication happy path against a disposable MongoDB instance when a test runtime permits it.
+- Exercise the full authentication happy path against a disposable MongoDB instance when a test runtime permits it.\n- Keep OpenAPI documentation available as a test-covered live contract.
 
 ## Next controls
 
@@ -35,7 +35,7 @@
 - [x] Refresh tokens are hashed at rest and not returned in JSON
 - [x] Refresh-token rotation and family revocation added
 - [x] CORS configured to the intended client origin
-- [x] Database-backed happy-path scenario implemented
+- [x] Database-backed happy-path scenario implemented\n- [x] OpenAPI contract and Swagger UI served from the API
 - [ ] Integration command verified in a MongoDB-permitted CI runner
 - [ ] Shared rate-limit store configured for multi-instance hosting
 - [ ] HTTPS enforced by the hosting platform
